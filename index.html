@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض فني ومالي | تنفيذ تطبيق حجوزات متكامل - KAAF Group</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Cairo & IBM Plex Sans Arabic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kaaf: {
+                            blue: '#0A4C86',
+                            blueLight: '#1C75C8',
+                            blueDeep: '#05233E',
+                            blueDarkest: '#031424',
+                            green: '#00875A',
+                            greenLight: '#00B377',
+                            greenDeep: '#023824',
+                            gold: '#D4AF37',
+                            goldLight: '#F5DE88',
+                            purple: '#7C3AED',
+                            purpleLight: '#A78BFA',
+                            rose: '#E11D48',
+                            roseLight: '#FB7185',
+                            cyan: '#06B6D4',
+                            cyanLight: '#67E8F9',
+                            amber: '#F59E0B',
+                            dark: '#030812',
+                            darkSlate: '#081220',
+                            cardBg: '#0B1A2E',
+                            border: '#1B314B'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        ibm: ['IBM Plex Sans Arabic', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'glow-blue': '0 0 35px -5px rgba(10, 76, 134, 0.6)',
+                        'glow-green': '0 0 35px -5px rgba(0, 135, 90, 0.6)',
+                        'glow-gold': '0 0 35px -5px rgba(212, 175, 55, 0.5)',
+                        'glow-cyan': '0 0 35px -5px rgba(6, 182, 212, 0.6)',
+                        'glow-purple': '0 0 35px -5px rgba(124, 58, 237, 0.6)',
+                        'web-card': '0 20px 45px -15px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+            background-color: #030812;
+            color: #E2E8F0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #interactive-bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.65;
+        }
+
+        .kaaf-ribbon {
+            background: linear-gradient(90deg, 
+                #0A4C86 0%, 
+                #06B6D4 20%, 
+                #00875A 40%, 
+                #D4AF37 60%, 
+                #7C3AED 80%, 
+                #E11D48 100%
+            );
+            height: 4px;
+        }
+
+        .web-card-blue {
+            background: linear-gradient(135deg, rgba(10, 30, 56, 0.85) 0%, rgba(5, 16, 32, 0.95) 100%);
+            border: 1px solid rgba(28, 117, 200, 0.35);
+            backdrop-filter: blur(14px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .web-card-blue:hover {
+            border-color: rgba(28, 117, 200, 0.75);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 35px -10px rgba(10, 76, 134, 0.5);
+        }
+
+        .web-card-green {
+            background: linear-gradient(135deg, rgba(8, 38, 28, 0.85) 0%, rgba(4, 20, 15, 0.95) 100%);
+            border: 1px solid rgba(0, 179, 119, 0.35);
+            backdrop-filter: blur(14px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .web-card-green:hover {
+            border-color: rgba(0, 179, 119, 0.75);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 35px -10px rgba(0, 135, 90, 0.5);
+        }
+
+        .web-card-purple {
+            background: linear-gradient(135deg, rgba(30, 18, 54, 0.85) 0%, rgba(14, 8, 28, 0.95) 100%);
+            border: 1px solid rgba(167, 139, 250, 0.35);
+            backdrop-filter: blur(14px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .web-card-purple:hover {
+            border-color: rgba(167, 139, 250, 0.75);
+            box-shadow: 0 16px 35px -10px rgba(124, 58, 237, 0.5);
+        }
+
+        .web-card-amber {
+            background: linear-gradient(135deg, rgba(38, 28, 12, 0.85) 0%, rgba(20, 14, 6, 0.95) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            backdrop-filter: blur(14px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .web-card-amber:hover {
+            border-color: rgba(245, 158, 11, 0.75);
+            box-shadow: 0 16px 35px -10px rgba(245, 158, 11, 0.5);
+        }
+
+        .web-card-cyan {
+            background: linear-gradient(135deg, rgba(8, 36, 48, 0.85) 0%, rgba(4, 18, 26, 0.95) 100%);
+            border: 1px solid rgba(6, 182, 212, 0.35);
+            backdrop-filter: blur(14px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .web-card-cyan:hover {
+            border-color: rgba(6, 182, 212, 0.75);
+            box-shadow: 0 16px 35px -10px rgba(6, 182, 212, 0.5);
+        }
+
+        .web-card-rose {
+            background: linear-gradient(135deg, rgba(40, 14, 28, 0.85) 0%, rgba(20, 6, 14, 0.95) 100%);
+            border: 1px solid rgba(251, 113, 133, 0.35);
+            backdrop-filter: blur(14px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Floating Widgets */
+        @keyframes float-brand {
+            0%, 100% { transform: translateY(0px); box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.55); }
+            50% { transform: translateY(-7px); box-shadow: 0 18px 30px -5px rgba(212, 175, 55, 0.8); }
+        }
+        @keyframes float-wa {
+            0%, 100% { transform: translateY(0px) scale(1); box-shadow: 0 10px 25px -5px rgba(37, 211, 102, 0.5); }
+            50% { transform: translateY(-7px) scale(1.03); box-shadow: 0 18px 30px -5px rgba(37, 211, 102, 0.8); }
+        }
+
+        .anim-float-brand { animation: float-brand 4s ease-in-out infinite; }
+        .anim-float-wa { animation: float-wa 4s ease-in-out infinite 0.5s; }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.2s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: #D4AF37;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Print Media Styles */
+        @media print {
+            body { background-color: #fff !important; color: #111 !important; }
+            #interactive-bg-canvas, aside, header, #floating-brand-btn, #floating-wa-btn { display: none !important; }
+            .web-card-blue, .web-card-green, .web-card-purple, .web-card-amber, .web-card-cyan, .web-card-rose {
+                background: #f8fafc !important;
+                border: 1px solid #cbd5e1 !important;
+                color: #0f172a !important;
+                box-shadow: none !important;
+            }
+            .text-white { color: #0f172a !important; }
+            .text-gray-200, .text-gray-300, .text-gray-400 { color: #334155 !important; }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-kaaf-gold selection:text-slate-950">
+
+    <!-- Interactive Ambient Canvas Layer -->
+    <canvas id="interactive-bg-canvas"></canvas>
+
+    <!-- Floating KAAF Brand Logo (Bottom Left) -->
+    <aside id="floating-kaaf-btn" class="fixed bottom-6 left-6 z-50">
+        <a href="https://kaafmarketing.sa/" target="_blank" rel="noopener noreferrer" title="مجموعة كاف | KAAF Group" class="block w-14 h-14 rounded-full overflow-hidden border-2 border-kaaf-cyanLight/80 p-0.5 bg-black/90 anim-float-brand transition-all hover:scale-110 group backdrop-blur-md">
+            <img src="https://i.ibb.co/qLQcG9vr/Whats-App-Image-2026-08-26-at-11-29-58.jpg" alt="KAAF Group Logo" class="w-full h-full object-cover rounded-full" onerror="this.src='https://placehold.co/100x100/0A4C86/ffffff?text=KAAF'">
+        </a>
+    </aside>
+
+    <!-- Document Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-kaaf-dark/90 backdrop-blur-xl border-b border-kaaf-border/70 px-4 lg:px-12 py-3.5 transition-all">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <!-- Brand Logo & Identity (Right in RTL) -->
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-2xl overflow-hidden border border-kaaf-blueLight/50 p-0.5 bg-black shrink-0 shadow-glow-blue">
+                    <img src="https://i.ibb.co/qLQcG9vr/Whats-App-Image-2026-08-26-at-11-29-58.jpg" alt="KAAF Group Logo" class="w-full h-full object-cover rounded-xl" onerror="this.src='https://placehold.co/100x100/0A4C86/ffffff?text=KAAF'">
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-base font-black text-white tracking-wide font-ibm">KAAF Group</span>
+                        <span class="px-2 py-0.5 rounded-full bg-kaaf-blue/30 text-kaaf-cyanLight text-[10px] font-extrabold border border-kaaf-blue/50">عرض فني ومالي</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 font-medium">تنفيذ تطبيق حجوزات متكامل • طيران · قطارات · فنادق · مواصلات · سوق المسافر</p>
+                </div>
+            </div>
+
+            <!-- Anchor Links (Arranged on Left in RTL) -->
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold text-gray-300">
+                <a href="#page-1" class="nav-link hover:text-white">الغلاف</a>
+                <a href="#page-2" class="nav-link hover:text-white">نبذة عن المشروع</a>
+                <a href="#page-3" class="nav-link hover:text-white">مزايا التطبيق</a>
+                <a href="#page-4" class="nav-link hover:text-white">لوحات التحكم والتكاملات</a>
+                <a href="#page-5" class="nav-link hover:text-white">منهجية العمل والتسليم</a>
+                <a href="#page-6" class="px-4 py-1.5 rounded-full bg-gradient-to-r from-kaaf-gold to-kaaf-amber text-slate-950 font-black hover:brightness-110 shadow-sm transition">الاستثمار والشروط</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Document Container -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 2: PROJECT OVERVIEW (نبذة عن المشروع)                                -->
+        <!-- ========================================================================= -->
+        <section id="page-2" class="space-y-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full bg-kaaf-blue/30 text-kaaf-cyanLight font-black text-xs border border-kaaf-blue/50 flex items-center gap-1.5">
+                        <i class="fa-solid fa-layer-group text-[11px]"></i>
+                        <span>نبذة عن المشروع</span>
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide flex items-center gap-2.5">
+                        <i class="fa-solid fa-earth-americas text-kaaf-cyanLight text-xl"></i>
+                        <span>تطبيق واحد لكل ما يحتاجه المسافر</span>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="web-card-blue rounded-3xl p-6 sm:p-10 space-y-8 border-2 border-kaaf-blue/40 shadow-web-card">
+                <!-- Exact Description Text -->
+                <p class="text-base sm:text-lg text-slate-200 leading-relaxed font-medium bg-black/40 p-5 rounded-2xl border border-white/10">
+                    نقترح تنفيذ منصة حجوزات متكاملة يحجز منها العميل الطيران والقطارات والفنادق ووسائل النقل داخل المدن، ويشتري كل ما يحتاجه لرحلته من سوق مخصص، بسلة واحدة ودفع واحد. المنصة تعمل في أكثر من دولة وبأكثر من عملة ولغة من اليوم الأول، ويتحكم فريقكم في كل تفاصيلها من لوحة تحكم واحدة دون الحاجة لتحديث التطبيق.
+                </p>
+
+                <!-- 4 Core Components -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-black text-kaaf-cyanLight flex items-center gap-2">
+                        <i class="fa-solid fa-cubes"></i>
+                        <span>ما الذي ستحصل عليه:</span>
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- 1. Client App -->
+                        <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-blue/40 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-10 h-10 rounded-xl bg-kaaf-blue/40 text-kaaf-cyanLight flex items-center justify-center text-lg">
+                                        <i class="fa-solid fa-mobile-screen-button"></i>
+                                    </div>
+                                    <h4 class="text-base font-black text-white">تطبيق العميل</h4>
+                                </div>
+                                <span class="px-2.5 py-0.5 rounded-full bg-kaaf-cyan/20 text-kaaf-cyanLight text-[11px] font-bold border border-kaaf-cyan/40">المنتج الرئيسي</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pt-1">
+                                تطبيق iOS و Android لحجز كل الخدمات، الدفع، المحفظة، الحجوزات والتذاكر الإلكترونية والدعم.
+                            </p>
+                        </div>
+
+                        <!-- 2. Admin Control Panel -->
+                        <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-purple/40 space-y-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-10 h-10 rounded-xl bg-kaaf-purple/30 text-kaaf-purpleLight flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-sliders"></i>
+                                </div>
+                                <h4 class="text-base font-black text-white">لوحة تحكم الأدمن</h4>
+                            </div>
+                            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pt-1">
+                                تحكم شبه كامل في كل شاشة ومحتوى وسعر وعرض داخل التطبيق، مع صلاحيات دقيقة لكل موظف.
+                            </p>
+                        </div>
+
+                        <!-- 3. Vendors Panel -->
+                        <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-amber/40 space-y-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-10 h-10 rounded-xl bg-kaaf-amber/30 text-kaaf-gold flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-store"></i>
+                                </div>
+                                <h4 class="text-base font-black text-white">لوحة الموردين</h4>
+                            </div>
+                            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pt-1">
+                                الفنادق وشركات النقل والتجار يضيفون عروضهم ويديرون طلباتهم ومستحقاتهم بأنفسهم.
+                            </p>
+                        </div>
+
+                        <!-- 4. Server & Integrations -->
+                        <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-green/40 space-y-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-10 h-10 rounded-xl bg-kaaf-green/30 text-kaaf-greenLight flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-server"></i>
+                                </div>
+                                <h4 class="text-base font-black text-white">الخادم والتكاملات</h4>
+                            </div>
+                            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pt-1">
+                                الربط مع مزودي الطيران والفنادق والقطارات وبوابات الدفع ومحرك التسعير والإشعارات.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- First Phase: Full Figma Design -->
+                <div class="p-6 rounded-2xl bg-gradient-to-r from-kaaf-gold/15 via-black/60 to-kaaf-blue/20 border-2 border-kaaf-gold/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded bg-kaaf-gold text-slate-950 text-[11px] font-black">مرحلة أولى</span>
+                            <h4 class="text-base font-black text-white">تصميم Figma كامل</h4>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-200 font-medium">
+                            تصميم كل الشاشات واعتماده منكم قبل أي برمجة، ثم تنفيذه بدقة.
+                        </p>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-black/70 border border-kaaf-gold/40 text-kaaf-gold flex items-center justify-center text-2xl shrink-0">
+                        <i class="fa-brands fa-figma"></i>
+                    </div>
+                </div>
+
+                <!-- Technologies Stack -->
+                <div class="space-y-3">
+                    <span class="text-xs font-black text-white block">التقنيات المعتمدة:</span>
+                    <div class="flex flex-wrap gap-2.5 text-xs font-bold font-ibm">
+                        <span class="px-3.5 py-2 rounded-xl bg-kaaf-blue/30 text-kaaf-cyanLight border border-kaaf-blueLight/40 flex items-center gap-2"><i class="fa-solid fa-mobile"></i> Flutter · iOS & Android</span>
+                        <span class="px-3.5 py-2 rounded-xl bg-black/50 text-emerald-300 border border-emerald-500/30 flex items-center gap-2"><i class="fa-brands fa-node-js"></i> Node.js</span>
+                        <span class="px-3.5 py-2 rounded-xl bg-black/50 text-sky-300 border border-sky-500/30 flex items-center gap-2"><i class="fa-brands fa-react"></i> React.js</span>
+                        <span class="px-3.5 py-2 rounded-xl bg-black/50 text-indigo-300 border border-indigo-500/30 flex items-center gap-2"><i class="fa-solid fa-database"></i> PostgreSQL</span>
+                        <span class="px-3.5 py-2 rounded-xl bg-black/50 text-rose-300 border border-rose-500/30 flex items-center gap-2"><i class="fa-solid fa-bolt"></i> Redis</span>
+                        <span class="px-3.5 py-2 rounded-xl bg-black/50 text-amber-300 border border-amber-500/30 flex items-center gap-2"><i class="fa-solid fa-cloud"></i> Cloud Hosting</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 3: APP FEATURES (مزايا التطبيق)                                       -->
+        <!-- ========================================================================= -->
+        <section id="page-3" class="space-y-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full bg-kaaf-cyan/30 text-kaaf-cyanLight font-black text-xs border border-kaaf-cyan/50 flex items-center gap-1.5">
+                        <i class="fa-solid fa-sparkles text-[11px]"></i>
+                        <span>مزايا التطبيق</span>
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide flex items-center gap-2.5">
+                        <i class="fa-solid fa-suitcase-rolling text-kaaf-cyanLight text-xl"></i>
+                        <span>كل خدمات الرحلة في تجربة واحدة</span>
+                    </h2>
+                </div>
+            </div>
+
+            <!-- 9 Feature Groups Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+
+                <!-- 1. Flights -->
+                <div class="web-card-blue p-6 rounded-3xl space-y-3 border-t-4 border-t-kaaf-cyanLight">
+                    <div class="flex items-center gap-2.5 font-black text-white text-sm pb-2 border-b border-white/10">
+                        <i class="fa-solid fa-plane text-kaaf-cyanLight text-base"></i>
+                        <span>الطيران</span>
+                    </div>
+                    <ul class="space-y-2 text-gray-300 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-0.5"></i> <span>بحث ذهاب، ذهاب وعودة، وجهات متعددة</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-0.5"></i> <span>فلاتر وأسعار مرنة + 3 أيام</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-0.5"></i> <span>تذكرة إلكترونية، إلغاء واسترداد</span></li>
+                    </ul>
+                </div>
+
+                <!-- 2. Trains -->
+                <div class="web-card-cyan p-6 rounded-3xl space-y-3 border-t-4 border-t-kaaf-cyan">
+                    <div class="flex items-center gap-2.5 font-black text-white text-sm pb-2 border-b border-white/10">
+                        <i class="fa-solid fa-train text-kaaf-cyan text-base"></i>
+                        <span>القطارات</span>
+                    </div>
+                    <ul class="space-y-2 text-gray-300 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyan mt-0.5"></i> <span>البحث بين المحطات والدرجات</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyan mt-0.5"></i> <span>اختيار المقعد عند توفره</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyan mt-0.5"></i> <span>تذكرة QR تعمل بدون إنترنت</span></li>
+                    </ul>
+                </div>
+
+                <!-- 3. Hotels & Accommodation -->
+                <div class="web-card-amber p-6 rounded-3xl space-y-3 border-t-4 border-t-kaaf-gold">
+                    <div class="flex items-center gap-2.5 font-black text-white text-sm pb-2 border-b border-white/10">
+                        <i class="fa-solid fa-hotel text-kaaf-gold text-base"></i>
+                        <span>الفنادق والإقامة</span>
+                    </div>
+                    <ul class="space-y-2 text-gray-300 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-0.5"></i> <span>بحث بالمدينة أو الخريطة</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-0.5"></i> <span>مقارنة أفضل سعر من عدة مزودين</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-0.5"></i> <span>شقق وفيلات وشاليهات</span></li>
+                    </ul>
+                </div>
+
+                <!-- 4. Transportation -->
+                <div class="web-card-green p-6 rounded-3xl space-y-3 border-t-4 border-t-kaaf-greenLight">
+                    <div class="flex items-center gap-2.5 font-black text-white text-sm pb-2 border-b border-white/10">
+                        <i class="fa-solid fa-car text-kaaf-greenLight text-base"></i>
+                        <span>المواصلات</span>
+                    </div>
+                    <ul class="space-y-2 text-gray-300 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-greenLight mt-0.5"></i> <span>نقل من وإلى المطار</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-greenLight mt-0.5"></i> <span>طلب سيارة فوري بتتبع حي</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-greenLight mt-0.5"></i> <span>استئجار سيارة بسائق أو بدون</span></li>
+                    </ul>
+                </div>
+
+                <!-- 5. Traveler Market -->
+                <div class="web-card-purple p-6 rounded-3xl space-y-3 border-t-4 border-t-kaaf-purpleLight">
+                    <div class="flex items-center gap-2.5 font-black text-white text-sm pb-2 border-b border-white/10">
+                        <i class="fa-solid fa-bag-shopping text-kaaf-purpleLight text-base"></i>
+                        <span>سوق المسافر</span>
+                    </div>
+                    <ul class="space-y-2 text-gray-300 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-purpleLight mt-0.5"></i> <span>SIM وتأمين سفر وخدمات</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-purpleLight mt-0.5"></i> <span>جولات وتذاكر فعاليات</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-purpleLight mt-0.5"></i> <span>باقات جاهزة بسعر واحد</span></li>
+                    </ul>
+                </div>
+
+                <!-- 6. Payment & Wallet -->
+                <div class="web-card-blue p-6 rounded-3xl space-y-3 border-t-4 border-t-kaaf-blueLight">
+                    <div class="flex items-center gap-2.5 font-black text-white text-sm pb-2 border-b border-white/10">
+                        <i class="fa-solid fa-wallet text-kaaf-cyanLight text-base"></i>
+                        <span>الدفع والمحفظة</span>
+                    </div>
+                    <ul class="space-y-2 text-gray-300 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-0.5"></i> <span>بطاقات و Apple Pay و Google Pay</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-0.5"></i> <span>بوابات محلية لكل دولة مثل ميسر</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-0.5"></i> <span>محفظة وكاش باك واسترداد</span></li>
+                    </ul>
+                </div>
+
+                <!-- 7. My Account & Bookings -->
+                <div class="web-card-cyan p-6 rounded-3xl space-y-3 border-t-4 border-t-kaaf-cyan">
+                    <div class="flex items-center gap-2.5 font-black text-white text-sm pb-2 border-b border-white/10">
+                        <i class="fa-solid fa-user-check text-kaaf-cyan text-base"></i>
+                        <span>حسابي وحجوزاتي</span>
+                    </div>
+                    <ul class="space-y-2 text-gray-300 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyan mt-0.5"></i> <span>دخول بالبريد أو الهاتف أو Apple/Google</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyan mt-0.5"></i> <span>كل حجوزات الرحلة في جدول واحد</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyan mt-0.5"></i> <span>مسافرون محفوظون للعائلة</span></li>
+                    </ul>
+                </div>
+
+                <!-- 8. Marketing & Loyalty -->
+                <div class="web-card-amber p-6 rounded-3xl space-y-3 border-t-4 border-t-kaaf-gold">
+                    <div class="flex items-center gap-2.5 font-black text-white text-sm pb-2 border-b border-white/10">
+                        <i class="fa-solid fa-gift text-kaaf-gold text-base"></i>
+                        <span>التسويق والولاء</span>
+                    </div>
+                    <ul class="space-y-2 text-gray-300 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-0.5"></i> <span>كوبونات وعروض وإحالة صديق</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-0.5"></i> <span>نقاط ولاء ومستويات عضوية</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-0.5"></i> <span>إشعارات موجهة</span></li>
+                    </ul>
+                </div>
+
+                <!-- 9. Support & Notifications -->
+                <div class="web-card-green p-6 rounded-3xl space-y-3 border-t-4 border-t-kaaf-greenLight">
+                    <div class="flex items-center gap-2.5 font-black text-white text-sm pb-2 border-b border-white/10">
+                        <i class="fa-solid fa-headset text-kaaf-greenLight text-base"></i>
+                        <span>الدعم والإشعارات</span>
+                    </div>
+                    <ul class="space-y-2 text-gray-300 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-greenLight mt-0.5"></i> <span>محادثة دعم مرتبطة بالحجز</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-greenLight mt-0.5"></i> <span>تنبيهات تأخير الرحلات</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-greenLight mt-0.5"></i> <span>Push وبريد و WhatsApp</span></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Designed to Scale Section (مصمم للتوسع) -->
+            <div class="web-card-green rounded-3xl p-6 sm:p-8 space-y-4 border-2 border-kaaf-greenLight/40 shadow-glow-green">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-up-right-and-down-left-from-center text-kaaf-greenLight text-lg"></i>
+                    <h3 class="text-lg font-black text-white">مصمم للتوسع</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="p-4 rounded-2xl bg-black/50 border border-emerald-500/30 space-y-1.5">
+                        <span class="font-black text-kaaf-greenLight block text-sm">متعدد الدول</span>
+                        <p class="text-gray-300 leading-relaxed">إطلاق دولة جديدة بالإعدادات فقط: عملة، لغة، ضرائب، بوابة دفع.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-black/50 border border-emerald-500/30 space-y-1.5">
+                        <span class="font-black text-kaaf-greenLight block text-sm">عربي وإنجليزي</span>
+                        <p class="text-gray-300 leading-relaxed">دعم كامل للعربية من اليمين لليسار، وإضافة لغات من لوحة التحكم.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-black/50 border border-emerald-500/30 space-y-1.5">
+                        <span class="font-black text-kaaf-greenLight block text-sm">آمن</span>
+                        <p class="text-gray-300 leading-relaxed">بيانات البطاقات لا تخزن لدينا، و 3-D Secure لكل عملية دفع.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 4: CONTROL PANELS & INTEGRATIONS (لوحات التحكم)                      -->
+        <!-- ========================================================================= -->
+        <section id="page-4" class="space-y-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full bg-kaaf-purple/30 text-kaaf-purpleLight font-black text-xs border border-kaaf-purple/50 flex items-center gap-1.5">
+                        <i class="fa-solid fa-sliders text-[11px]"></i>
+                        <span>لوحات التحكم</span>
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide flex items-center gap-2.5">
+                        <i class="fa-solid fa-gauge-high text-kaaf-purpleLight text-xl"></i>
+                        <span>فريقك يتحكم في كل شيء</span>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="web-card-purple rounded-3xl p-6 sm:p-10 space-y-8 border-2 border-kaaf-purple/40 shadow-web-card">
+                <p class="text-sm sm:text-base text-gray-200 font-medium">
+                    كل نص وصورة وقسم وسعر داخل التطبيق يدار من لوحة الأدمن ويظهر فورًا للعملاء، دون إصدار نسخة جديدة على المتجر.
+                </p>
+
+                <!-- Two Control Panels (Admin & Vendors) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Admin Panel -->
+                    <div class="p-6 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-blue/40 space-y-4">
+                        <div class="flex items-center gap-2.5 pb-2 border-b border-white/10">
+                            <div class="w-9 h-9 rounded-xl bg-kaaf-blue/40 text-kaaf-cyanLight flex items-center justify-center">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <h3 class="text-base font-black text-white">لوحة الأدمن</h3>
+                        </div>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-gray-300 font-medium">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-1"></i> <span>ترتيب الصفحة الرئيسية والبانرات بالسحب والإفلات</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-1"></i> <span>إظهار وإخفاء أي خدمة لكل دولة</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-1"></i> <span>إدارة العملاء والموردين والحجوزات</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-1"></i> <span>قواعد الهامش والعمولات والرسوم</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-1"></i> <span>المالية والتسويات والفواتير والتقارير</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-cyanLight mt-1"></i> <span>صلاحيات لكل موظف وسجل لكل إجراء</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Vendors Panel -->
+                    <div class="p-6 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-gold/40 space-y-4">
+                        <div class="flex items-center gap-2.5 pb-2 border-b border-white/10">
+                            <div class="w-9 h-9 rounded-xl bg-kaaf-gold/20 text-kaaf-gold flex items-center justify-center">
+                                <i class="fa-solid fa-store"></i>
+                            </div>
+                            <h3 class="text-base font-black text-white">لوحة الموردين</h3>
+                        </div>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-gray-300 font-medium">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-1"></i> <span>تسجيل ذاتي ورفع المستندات</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-1"></i> <span>إضافة الغرف والرحلات والمنتجات</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-1"></i> <span>تقويم التوفر والأسعار باليوم</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-1"></i> <span>قبول الطلبات ومراسلة العميل</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-1"></i> <span>كشف حساب وطلب سحب المستحقات</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kaaf-gold mt-1"></i> <span>مؤشرات المبيعات والتقييمات</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Revenue Model -->
+                <div class="space-y-3">
+                    <h3 class="text-sm font-black text-kaaf-goldLight">نموذج الإيراد الذي تدعمه المنصة:</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="p-4 rounded-2xl bg-black/50 border border-kaaf-gold/30 space-y-1.5">
+                            <span class="font-black text-kaaf-goldLight text-sm block">هامش ربح</span>
+                            <p class="text-gray-300 leading-relaxed">على أسعار مزودي الطيران والفنادق قابل للضبط لكل دولة ووحدة.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-black/50 border border-kaaf-gold/30 space-y-1.5">
+                            <span class="font-black text-kaaf-goldLight text-sm block">عمولة الموردين</span>
+                            <p class="text-gray-300 leading-relaxed">نسبة من كل طلب للموردين المباشرين حسب العقد أو الفئة.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-black/50 border border-kaaf-gold/30 space-y-1.5">
+                            <span class="font-black text-kaaf-goldLight text-sm block">رسوم وإعلانات</span>
+                            <p class="text-gray-300 leading-relaxed">رسوم خدمة، اشتراكات موردين، ومواضع إعلانية مميزة.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrations -->
+                <div class="p-6 rounded-2xl bg-black/70 border border-kaaf-cyan/40 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="text-base font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-plug text-kaaf-cyanLight"></i>
+                            <span>التكاملات</span>
+                        </h3>
+                        <div class="flex gap-2 text-xs font-mono font-bold">
+                            <span class="px-3 py-1 rounded-lg bg-kaaf-blue/30 text-kaaf-cyanLight border border-kaaf-blue/50">Amadeus</span>
+                            <span class="px-3 py-1 rounded-lg bg-kaaf-blue/30 text-kaaf-cyanLight border border-kaaf-blue/50">Sabre</span>
+                            <span class="px-3 py-1 rounded-lg bg-kaaf-blue/30 text-kaaf-cyanLight border border-kaaf-blue/50">Hotelbeds</span>
+                        </div>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                        الربط مع مزودي حجز عالميين للطيران مثل Amadeus أو Sabre والفنادق مثل Hotelbeds، ومشغلي القطارات في كل دولة، وبوابات الدفع المحلية والدولية، وخدمات الخرائط والرسائل. يتم اختيار المزودين النهائيين معكم وقت التعاقد.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 5: METHODOLOGY & DELIVERY STAGES (منهجية العمل)                       -->
+        <!-- ========================================================================= -->
+        <section id="page-5" class="space-y-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full bg-kaaf-green/30 text-kaaf-greenLight font-black text-xs border border-kaaf-green/50 flex items-center gap-1.5">
+                        <i class="fa-solid fa-timeline text-[11px]"></i>
+                        <span>منهجية العمل</span>
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide flex items-center gap-2.5">
+                        <i class="fa-solid fa-diagram-project text-kaaf-greenLight text-xl"></i>
+                        <span>من التصميم إلى الإطلاق</span>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="web-card-green rounded-3xl p-6 sm:p-10 space-y-8 border-2 border-kaaf-green/40 shadow-web-card">
+                <!-- 6 Sequential Workflow Steps Timeline -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                    <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-green/30 space-y-2">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-full bg-kaaf-green text-white flex items-center justify-center font-black text-xs">1</span>
+                            <h3 class="text-sm font-black text-white">تحليل المتطلبات</h3>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">اعتماد وثيقة BRD و SRS المرفقة كمرجع للنطاق الكامل.</p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-green/30 space-y-2">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-full bg-kaaf-green text-white flex items-center justify-center font-black text-xs">2</span>
+                            <h3 class="text-sm font-black text-white">تصميم Figma</h3>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">تصميم كل الشاشات وعرضها عليكم، والتعديل حتى الاعتماد النهائي.</p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-green/30 space-y-2">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-full bg-kaaf-green text-white flex items-center justify-center font-black text-xs">3</span>
+                            <h3 class="text-sm font-black text-white">التطوير</h3>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">تنفيذ التطبيق ولوحات التحكم مطابقًا للتصميم المعتمد بدقة، مع عرض دوري للتقدم.</p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-green/30 space-y-2">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-full bg-kaaf-green text-white flex items-center justify-center font-black text-xs">4</span>
+                            <h3 class="text-sm font-black text-white">الاختبار والربط</h3>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">اختبار كامل، ربط المزودين وبوابات الدفع، واختبار القبول معكم.</p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-green/30 space-y-2">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-full bg-kaaf-green text-white flex items-center justify-center font-black text-xs">5</span>
+                            <h3 class="text-sm font-black text-white">الإطلاق</h3>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">رفع التطبيق على Google Play و App Store وتشغيل المنصة.</p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-kaaf-darkSlate/95 border border-kaaf-green/30 space-y-2">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-7 h-7 rounded-full bg-kaaf-green text-white flex items-center justify-center font-black text-xs">6</span>
+                            <h3 class="text-sm font-black text-white">الدعم</h3>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">دعم فني لمدة 6 أشهر من تاريخ التسليم.</p>
+                    </div>
+                </div>
+
+                <!-- Delivery Stages Table (مراحل التسليم) -->
+                <div class="space-y-3">
+                    <h3 class="text-base font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-days text-kaaf-greenLight"></i>
+                        <span>مراحل التسليم</span>
+                    </h3>
+
+                    <div class="overflow-x-auto rounded-2xl border border-kaaf-border bg-kaaf-darkSlate/90 shadow-lg">
+                        <table class="w-full text-right text-xs sm:text-sm">
+                            <thead class="bg-kaaf-cardBg text-gray-200 border-b border-kaaf-border font-bold">
+                                <tr>
+                                    <th class="p-4 w-1/4">المرحلة</th>
+                                    <th class="p-4 w-1/5 text-center">المدة</th>
+                                    <th class="p-4">المحتوى</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-kaaf-border/60 text-gray-300 font-medium">
+                                <tr class="hover:bg-kaaf-cardBg/60 transition">
+                                    <td class="p-4 font-black text-kaaf-cyanLight">0 · التأسيس</td>
+                                    <td class="p-4 text-center font-bold text-white">15 يومًا</td>
+                                    <td class="p-4">تصميم Figma، عقود المزودين، البنية التحتية</td>
+                                </tr>
+                                <tr class="hover:bg-kaaf-cardBg/60 transition">
+                                    <td class="p-4 font-black text-kaaf-cyanLight">1 · الإطلاق الأول</td>
+                                    <td class="p-4 text-center font-bold text-white">15 يومًا</td>
+                                    <td class="p-4">الحساب، الطيران والفنادق، الدفع والمحفظة، لوحتا التحكم</td>
+                                </tr>
+                                <tr class="hover:bg-kaaf-cardBg/60 transition">
+                                    <td class="p-4 font-black text-kaaf-cyanLight">2 · التوسع</td>
+                                    <td class="p-4 text-center font-bold text-white">15 يومًا</td>
+                                    <td class="p-4">القطارات، النقل من المطار، السوق، الكوبونات والولاء</td>
+                                </tr>
+                                <tr class="hover:bg-kaaf-cardBg/60 transition">
+                                    <td class="p-4 font-black text-kaaf-cyanLight">3 · النضج</td>
+                                    <td class="p-4 text-center font-bold text-white">15 يومًا</td>
+                                    <td class="p-4">النقل الفوري، الباقات، المساعد الذكي، نسخة الويب</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 6: INVESTMENT & TERMS (الاستثمار والشروط)                             -->
+        <!-- ========================================================================= -->
+        <section id="page-6" class="space-y-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full bg-kaaf-gold/30 text-kaaf-goldLight font-black text-xs border border-kaaf-gold/50 flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-invoice-dollar text-[11px]"></i>
+                        <span>الاستثمار والشروط</span>
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide flex items-center gap-2.5">
+                        <i class="fa-solid fa-coins text-kaaf-gold text-xl"></i>
+                        <span>الاستثمار والشروط</span>
+                    </h2>
+                </div>
+            </div>
+
+            <!-- What the Agreement Includes (ما يشمله الاتفاق) -->
+            <div class="web-card-cyan rounded-3xl p-6 sm:p-8 space-y-4 border border-kaaf-cyan/40">
+                <h3 class="text-base font-black text-white">ثالثًا: ما يشمله الاتفاق</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="p-4 rounded-2xl bg-black/50 border border-kaaf-cyan/30 space-y-1.5">
+                        <span class="font-black text-kaaf-cyanLight text-sm block">Figma أولًا</span>
+                        <p class="text-gray-300 leading-relaxed font-medium">تصميم معتمد منكم قبل البرمجة، وتنفيذ مطابق له بجودة عالية.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-black/50 border border-kaaf-cyan/30 space-y-1.5">
+                        <span class="font-black text-kaaf-cyanLight text-sm block">تعديلات موثقة</span>
+                        <p class="text-gray-300 leading-relaxed font-medium">أي تعديل أو ميزة تطلبونها توثق وتصبح جزءًا من الاتفاق والمزايا.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-black/50 border border-kaaf-cyan/30 space-y-1.5">
+                        <span class="font-black text-kaaf-cyanLight text-sm block">دعم 6 أشهر</span>
+                        <p class="text-gray-300 leading-relaxed font-medium">دعم فني من تاريخ التسليم لكل المزايا المتفق عليها.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KAAF Official Information & Footer Section -->
+            <div class="relative rounded-[32px] overflow-hidden p-8 sm:p-10 bg-gradient-to-br from-kaaf-blueDeep via-kaaf-darkSlate to-kaaf-dark border border-kaaf-blueLight/40 space-y-6 shadow-web-card">
+                <div class="kaaf-ribbon absolute top-0 left-0 right-0"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-right text-xs sm:text-sm">
+                    <div class="p-4 rounded-2xl bg-black/50 border border-kaaf-gold/30 space-y-1">
+                        <span class="text-gray-400 text-xs block">اسم الشركة</span>
+                        <span class="font-black text-kaaf-goldLight">كاف النمو الإبداعي</span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-black/50 border border-kaaf-gold/30 space-y-1">
+                        <span class="text-gray-400 text-xs block">اسم المسؤول</span>
+                        <span class="font-black text-white">السيد/ رياض نواف العتيبي</span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-black/50 border border-kaaf-gold/30 space-y-1">
+                        <span class="text-gray-400 text-xs block">السجل التجاري</span>
+                        <span class="font-black text-kaaf-cyanLight font-ibm">7008377603</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-white/10 flex items-center justify-center text-xs text-gray-400 font-bold">
+                    <span>عرض مقدم من شركة كاف النمو الإبداعي - سري</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Interactive Ambient Canvas Script -->
+    <script>
+        (function() {
+            const canvas = document.getElementById('interactive-bg-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const particleCount = 42;
+            const colors = ['#0A4C86', '#06B6D4', '#00875A', '#7C3AED', '#D4AF37'];
+            const pointer = { x: null, y: null, radius: 140 };
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+
+            window.addEventListener('resize', resize);
+
+            window.addEventListener('mousemove', function(e) {
+                pointer.x = e.clientX;
+                pointer.y = e.clientY;
+            });
+
+            window.addEventListener('mouseleave', function() {
+                pointer.x = null;
+                pointer.y = null;
+            });
+
+            window.addEventListener('touchmove', function(e) {
+                if (e.touches && e.touches.length > 0) {
+                    pointer.x = e.touches[0].clientX;
+                    pointer.y = e.touches[0].clientY;
+                }
+            }, { passive: true });
+
+            window.addEventListener('touchend', function() {
+                pointer.x = null;
+                pointer.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.65;
+                    this.vy = (Math.random() - 0.5) * 0.65;
+                    this.radius = Math.random() * 2 + 1;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.alpha = Math.random() * 0.35 + 0.2;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Subtle, gentle repulsion near pointer/touch
+                    if (pointer.x !== null && pointer.y !== null) {
+                        let dx = this.x - pointer.x;
+                        let dy = this.y - pointer.y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < pointer.radius && dist > 0) {
+                            let force = (pointer.radius - dist) / pointer.radius;
+                            this.x += (dx / dist) * force * 1.4;
+                            this.y += (dy / dist) * force * 1.4;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fill();
+                }
+            }
+
+            function init() {
+                resize();
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function connect() {
+                const maxDist = 130;
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a + 1; b < particles.length; b++) {
+                        let dx = particles[a].x - particles[b].x;
+                        let dy = particles[a].y - particles[b].y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDist) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = '#06B6D4';
+                            ctx.globalAlpha = (1 - (dist / maxDist)) * 0.2;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Soft connection lines to pointer
+                    if (pointer.x !== null && pointer.y !== null) {
+                        let dx = particles[a].x - pointer.x;
+                        let dy = particles[a].y - pointer.y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < pointer.radius) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(pointer.x, pointer.y);
+                            ctx.strokeStyle = '#D4AF37';
+                            ctx.globalAlpha = (1 - (dist / pointer.radius)) * 0.28;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.globalAlpha = 1;
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                connect();
+                requestAnimationFrame(animate);
+            }
+
+            window.onload = function() {
+                init();
+                animate();
+            };
+        })();
+    </script>
+</body>
+</html>
